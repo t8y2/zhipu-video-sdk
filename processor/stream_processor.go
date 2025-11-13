@@ -102,12 +102,14 @@ func (sp *StreamProcessor) ProcessH264StreamWithContext(ctx context.Context, h26
 	}
 
 	// 1. Inject SPS/PPS into H.264 stream
+	fmt.Println("正在注入 SPS/PPS 参数...")
 	fixedData, err := sp.injectSPSPPS(h264Data)
 	if err != nil {
 		return nil, fmt.Errorf("failed to inject SPS/PPS: %w", err)
 	}
 
 	// 2. Write H.264 data to temp file
+	fmt.Println("正在写入临时文件...")
 	h264Path := filepath.Join(sp.tempDir, fmt.Sprintf("stream_%d.h264", time.Now().UnixNano()))
 	if err := os.WriteFile(h264Path, fixedData, 0644); err != nil {
 		return nil, fmt.Errorf("failed to write h264 file: %w", err)
@@ -115,12 +117,14 @@ func (sp *StreamProcessor) ProcessH264StreamWithContext(ctx context.Context, h26
 	defer os.Remove(h264Path)
 
 	// 3. Extract frames using ffmpeg
+	fmt.Println("正在使用 ffmpeg 提取帧...")
 	frames, err := sp.extractFramesFromH264(ctx, h264Path)
 	if err != nil {
 		return nil, fmt.Errorf("failed to extract frames: %w", err)
 	}
 
 	// 4. Convert frames to base64
+	fmt.Printf("帧提取完成，共 %d 帧，正在转换为 base64...\n", len(frames))
 	base64Frames := make([]string, len(frames))
 	for i, frame := range frames {
 		base64Frames[i] = base64.StdEncoding.EncodeToString(frame)

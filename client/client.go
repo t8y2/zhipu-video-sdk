@@ -163,6 +163,7 @@ func (c *Client) AnalyzeH264StreamWithOptions(h264Data []byte, prompt string, op
 	}
 
 	// 将 base64 帧转换为字节数组
+	fmt.Println("正在准备图像数据...")
 	frames := make([][]byte, len(base64Frames))
 	for i, b64Frame := range base64Frames {
 		frameData, err := base64.StdEncoding.DecodeString(b64Frame)
@@ -172,6 +173,7 @@ func (c *Client) AnalyzeH264StreamWithOptions(h264Data []byte, prompt string, op
 		frames[i] = frameData
 	}
 
+	fmt.Println("正在调用 GLM-4.5V API 进行视频分析...")
 	return c.AnalyzeFramesWithOptions(prompt, frames, options)
 }
 
