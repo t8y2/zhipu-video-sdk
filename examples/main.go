@@ -15,7 +15,7 @@ import (
 func main() {
 	if len(os.Args) < 2 {
 		fmt.Println("Usage: go run main.go <h264_file_path> [prompt]")
-		fmt.Println("Example: go run main.go video.h264 \"请描述这个视频中发生了什么\"")
+		fmt.Println("Example: go run main.go test.h264 \"请描述这个视频中发生了什么\"")
 		os.Exit(1)
 	}
 
